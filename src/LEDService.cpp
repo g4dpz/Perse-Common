@@ -4,6 +4,7 @@
 #include "SingleLED.h"
 #include "LEDBlinkFunction.h"
 #include "LEDBreatheFunction.h"
+#include "LEDBreatheToFunction.h"
 
 static const char* TAG = "LEDService";
 
@@ -76,6 +77,17 @@ void LEDService::set(LED led, float percent){
 	instructionQueue.post(instruction);
 }
 
+void LEDService::breatheTo(LED led, float targetPercent, uint32_t duration){
+	LEDInstructionInfo instruction{
+			.led = led,
+			.instruction = BreatheTo,
+			.period = duration,
+			.targetPercent = std::clamp(targetPercent, 0.0f, 100.0f)
+	};
+
+	instructionQueue.post(instruction);
+}
+
 void LEDService::loop(){
 	TickType_t timeout = ledFunctions.empty() ? portMAX_DELAY : pdMS_TO_TICKS(10);
 	LEDInstructionInfo info;
@@ -90,6 +102,8 @@ void LEDService::loop(){
 			breatheInternal(info.led, info.period);
 		}else if(info.instruction == Set){
 			setInternal(info.led, info.targetPercent);
+		}else if(info.instruction == BreatheTo){
+			breatheToInternal(info.led, info.targetPercent, info.period);
 		}
 	}
 
@@ -170,4 +184,17 @@ void LEDService::setInternal(LED led, float percent){
 	}
 
 	ledDevices[led]->setValue((uint8_t)(0xFF * percent / 100.0f));
+}
+
+void LEDService::breatheToInternal(LED led, float targetPercent, uint32_t duration){
+	if(ledFunctions.contains(led)){
+		ledFunctions.erase(led);
+	}
+
+	if(!ledDevices.contains(led)){
+		ESP_LOGW(TAG, "LED %d is set to breathe to value, but does not exist.", (uint8_t) led);
+		return;
+	}
+
+	ledFunctions[led] = std::make_unique<LEDBreatheToFunction>(*ledDevices[led], targetPercent, duration);
 }

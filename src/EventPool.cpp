@@ -60,6 +60,20 @@ void EventPool::deallocate(void* ptr){
 
 	xSemaphoreTake(mutex, portMAX_DELAY);
 
+	// Guard against double-free: reject if pool is full or pointer already in free list
+	uint8_t* p = static_cast<uint8_t*>(ptr);
+	if(p < storage || p >= storage + blockSize * blockCount || freeCount >= blockCount){
+		xSemaphoreGive(mutex);
+		return;
+	}
+
+	for(size_t i = 0; i < freeCount; i++){
+		if(freeList[i] == ptr){
+			xSemaphoreGive(mutex);
+			return;
+		}
+	}
+
 	freeList[freeCount] = ptr;
 	freeCount++;
 

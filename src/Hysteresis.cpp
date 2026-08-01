@@ -30,6 +30,8 @@ int Hysteresis::reset(int val) {
 }
 
 int Hysteresis::findLevel(int val) {
+	if(val < Thresholds[0]) return 0;
+
 	int i;
 	for(i = 0; i < LevelCount; i++) {
 		if(val >= Thresholds[i] && val <= Thresholds[i + 1]) break;

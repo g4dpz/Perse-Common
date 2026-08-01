@@ -23,6 +23,7 @@ public:
 	void blink(LED led, uint32_t count = 1, uint32_t period = 1000);
 	void breathe(LED led, uint32_t period = 1000);
 	void set(LED led, float percent);
+	void breatheTo(LED led, float targetPercent, uint32_t duration = 250);
 
 	void registerLED(LED led, SingleLED* device);
 
@@ -35,7 +36,8 @@ private:
 		Off,
 		Blink,
 		Breathe,
-		Set
+		Set,
+		BreatheTo
 	};
 
 	struct LEDInstructionInfo {
@@ -56,6 +58,7 @@ private:
 	void blinkInternal(LED led, uint32_t count, uint32_t period);
 	void breatheInternal(LED led, uint32_t period);
 	void setInternal(LED led, float percent);
+	void breatheToInternal(LED led, float targetPercent, uint32_t duration);
 };
 
 #endif //PERSE_COMMON_LEDSERVICE_H

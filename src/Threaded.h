@@ -26,6 +26,8 @@ protected:
 	virtual void afterStopSignal();
 	virtual void loop() = 0;
 
+	TaskHandle_t getTaskHandle() const { return task; }
+
 private:
 	const char* name;
 	size_t stackSize;

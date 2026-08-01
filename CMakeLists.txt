@@ -7,6 +7,18 @@ set(COMPONENT_SRCS
     src/RoverStateUtil.cpp
     src/Threaded.cpp
     src/Hysteresis.cpp
+    src/EventPool.cpp
+    src/Events.cpp
+    src/ADCReader.cpp
+    src/LEDService.cpp
+    src/LEDFunction.cpp
+    src/LEDBlinkFunction.cpp
+    src/LEDBreatheFunction.cpp
+    src/LEDBreatheToFunction.cpp
+    src/SingleLED.cpp
+    src/SingleExpanderLED.cpp
+    src/SinglePwmLED.cpp
+    src/ServiceLocator.cpp
 )
 
 set(COMPONENT_ADD_INCLUDEDIRS src)

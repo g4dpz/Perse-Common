@@ -38,6 +38,10 @@ float ADCReader::getValue() const {
 		std::swap(minimum, maximum);
 	}
 
+	if(maximum == minimum) {
+		return 0.0f;
+	}
+
 	float val = std::clamp(adjusted, minimum, maximum);
 	val = (val - minimum) / (maximum - minimum);
 	val = std::clamp(val * 100.0f, 0.0f, 100.0f);

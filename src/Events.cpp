@@ -106,7 +106,17 @@ bool EventQueue::post(Facility facility, void* data, size_t dataSize){
 		}
 		return false;
 	}
+
+	// Wake the associated task if one is registered
+	if(notifyTask != nullptr){
+		xTaskNotify(notifyTask, 0, eNoAction);
+	}
+
 	return true;
+}
+
+void EventQueue::setNotifyTask(TaskHandle_t task){
+	notifyTask = task;
 }
 
 void EventQueue::reset(){

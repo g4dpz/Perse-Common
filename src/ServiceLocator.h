@@ -1,6 +1,7 @@
 #ifndef PERSE_COMMON_SERVICELOCATOR_H
 #define PERSE_COMMON_SERVICELOCATOR_H
 
+#include <cstddef>
 #include <cstdint>
 #include <array>
 
@@ -11,16 +12,16 @@ class ServiceLocator {
 public:
 	template<typename T>
 	void set(Service service, T* ptr) {
-		services[static_cast<uint8_t>(service)] = static_cast<void*>(ptr);
+		services[static_cast<std::size_t>(service)] = static_cast<void*>(ptr);
 	}
 
 	template<typename T>
 	T* get(Service service) {
-		return static_cast<T*>(services[static_cast<uint8_t>(service)]);
+		return static_cast<T*>(services[static_cast<std::size_t>(service)]);
 	}
 
 private:
-	std::array<void*, static_cast<size_t>(Service::COUNT)> services{};
+	std::array<void*, static_cast<std::size_t>(Service::COUNT)> services{};
 };
 
 extern ServiceLocator Services;

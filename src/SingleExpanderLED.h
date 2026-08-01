@@ -2,7 +2,7 @@
 #define PERSE_COMMON_SINGLEEXPANDERLED_H
 
 #include "SingleLED.h"
-#include "AW9523.h"
+#include "Devices/AW9523.h"
 
 class SingleExpanderLED : public SingleLED {
 public:

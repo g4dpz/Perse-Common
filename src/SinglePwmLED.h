@@ -2,7 +2,7 @@
 #define PERSE_COMMON_SINGLEPWMLED_H
 
 #include "SingleLED.h"
-#include "PWM.h"
+#include "Periph/PWM.h"
 
 class SinglePwmLED : public SingleLED {
 public:

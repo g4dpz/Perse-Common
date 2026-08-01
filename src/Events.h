@@ -3,6 +3,7 @@
 
 #include <freertos/FreeRTOS.h>
 #include <freertos/queue.h>
+#include <freertos/task.h>
 #include <unordered_map>
 #include <unordered_set>
 #include <mutex>
@@ -51,8 +52,13 @@ public:
 	void reset();
 	void unblock();
 
+	/// Set a task to notify when an event is posted to this queue.
+	/// The notification wakes the task from xTaskNotifyWait.
+	void setNotifyTask(TaskHandle_t task);
+
 private:
 	QueueHandle_t queue;
+	TaskHandle_t notifyTask = nullptr;
 
 	struct InternalEvent {
 		Event evt;
