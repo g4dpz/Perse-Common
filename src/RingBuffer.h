@@ -3,6 +3,7 @@
 
 #include <cstdint>
 #include <cstddef>
+#include <cstring>
 
 class RingBuffer {
 public:
@@ -18,8 +19,16 @@ public:
 	template<typename T>
 	const T* peek(size_t offset = 0){
 		if(offset + sizeof(T) > readAvailable()) return nullptr;
-		offset = (beginning + offset) % size;
-		return (T*) (buffer + offset);
+		size_t pos = (beginning + offset) % size;
+		// Check if data spans the wrap boundary
+		if(pos + sizeof(T) > size){
+			// Linearise into peekBuf
+			size_t first = size - pos;
+			memcpy(peekBuf, buffer + pos, first);
+			memcpy(peekBuf + first, buffer, sizeof(T) - first);
+			return (const T*) peekBuf;
+		}
+		return (const T*) (buffer + pos);
 	}
 
 	size_t skip(size_t n);
@@ -33,6 +42,7 @@ private:
 	size_t end = 0;
 
 	uint8_t* buffer;
+	uint8_t peekBuf[64];
 };
 
 
