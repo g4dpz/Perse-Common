@@ -38,6 +38,8 @@ private:
 	static std::unordered_map<Facility, std::unordered_set<EventQueue*>> queues;
 	static std::mutex mut;
 	static EventPool* pool;
+
+	friend class EventQueue;
 };
 
 class EventQueue {
