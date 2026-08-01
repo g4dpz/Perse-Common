@@ -21,7 +21,8 @@ enum class CommType : uint8_t {
 	Audio,
 	ArmControl,
 	ControllerBatteryCritical,
-	ConnectionStrength
+	ConnectionStrength,
+	Heartbeat
 };
 
 enum class ConnectionStrength : uint8_t {
