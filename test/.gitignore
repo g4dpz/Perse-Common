@@ -1,0 +1,8 @@
+# Compiled test binaries
+test_eventpool
+test_eventpool_cycling
+test_events_pool_free
+test_ptrqueue_reset
+test_ringbuffer_peek
+test_servicelocator
+test_commdata_moduleplug
