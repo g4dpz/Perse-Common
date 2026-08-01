@@ -52,4 +52,18 @@ const extern uint8_t FrameHeader[FEED_ENV_LEN];
 const extern uint8_t FrameTrailer[FEED_ENV_LEN];
 const extern uint8_t FrameSizeShift[4];
 
+// Simple CRC8 (polynomial 0x31, init 0xFF)
+inline uint8_t crc8(const uint8_t* data, size_t len) {
+	uint8_t crc = 0xFF;
+	for (size_t i = 0; i < len; i++) {
+		crc ^= data[i];
+		for (int j = 0; j < 8; j++) {
+			crc = (crc & 0x80) ? (crc << 1) ^ 0x31 : (crc << 1);
+		}
+	}
+	return crc;
+}
+
+static constexpr size_t FrameCRCSize = 1;
+
 #endif //PERSE_ROVER_DRIVEINFO_H
